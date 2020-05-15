@@ -1,5 +1,5 @@
 import { Settings } from './settings';
-export declare function deploy_functions(settings: Settings, url: string): Promise<void>;
+export declare function deploy_functions(settings: Settings, url: string, debug: boolean): Promise<void>;
 export declare function deploy_source(src_fn_path: string, debug: boolean, url: string, fn_name: string, work_slug: string, jwt_token: string, _workspaceId?: string, _ids?: {
     [name: string]: {
         id: string;

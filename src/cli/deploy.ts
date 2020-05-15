@@ -10,7 +10,7 @@ export default function () {
       console.error(JSON.stringify(settings))
     } else {
       (async function () {
-        await deploy_functions(settings, '')
+        await deploy_functions(settings, '', false)
         // if (settings.protocol.src_fn_name) {
         //   await deploy_source(path.join(process.cwd(), 'src'), false, '', settings.protocol.src_fn_name, settings.protocol.work_slug, settings.server.jwt_token)
         //   console.log('Deployed source ' + settings.protocol.src_fn_name)

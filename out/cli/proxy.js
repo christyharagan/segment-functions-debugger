@@ -13,7 +13,7 @@ function default_1() {
         else {
             (async function () {
                 let [url] = await ngrok_1.launch(settings.server.port || 8000);
-                await deployer_1.deploy_functions(settings, url);
+                await deployer_1.deploy_functions(settings, url, true);
                 console.log('To test the function, send data to:');
                 console.log(url);
                 // if (settings.protocol.src_fn_name) {

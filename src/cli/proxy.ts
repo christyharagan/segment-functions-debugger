@@ -12,7 +12,7 @@ export default function () {
       (async function () {
         let [url] = await launch(settings.server.port || 8000)
 
-        await deploy_functions(settings, url)
+        await deploy_functions(settings, url, true)
 
         console.log('To test the function, send data to:')
         console.log(url)

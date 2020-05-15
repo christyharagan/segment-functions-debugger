@@ -13,7 +13,7 @@ const request_1 = require("./gateway/request");
 const api_2 = require("./gateway/api");
 const fs = __importStar(require("fs"));
 const path = __importStar(require("path"));
-async function deploy_functions(settings, url) {
+async function deploy_functions(settings, url, debug) {
     // await Promise.all([
     //   settings.protocol.src_fn_name ? deploy_source(path.join(process.cwd(), 'src'), true, url, settings.protocol.src_fn_name, settings.protocol.work_slug, settings.server.jwt_token).then(() => {
     //     console.log('Deployed source ' + settings.protocol.src_fn_name)
@@ -25,13 +25,13 @@ async function deploy_functions(settings, url) {
     if (settings.protocol.src_fn_name) {
         let src = path.join(process.cwd(), 'src');
         src = fs.existsSync(src) ? src : process.cwd();
-        await deploy_source(src, true, url, settings.protocol.src_fn_name, settings.protocol.work_slug, settings.server.jwt_token);
+        await deploy_source(src, debug, url, settings.protocol.src_fn_name, settings.protocol.work_slug, settings.server.jwt_token);
         console.log('Deployed source ' + settings.protocol.src_fn_name);
     }
     if (settings.protocol.dest_fn_name) {
         let src = path.join(process.cwd(), 'src');
         src = fs.existsSync(src) ? src : process.cwd();
-        await deploy_destination(src, true, url, settings.protocol.dest_fn_name, settings.protocol.work_slug, settings.server.jwt_token);
+        await deploy_destination(src, debug, url, settings.protocol.dest_fn_name, settings.protocol.work_slug, settings.server.jwt_token);
         console.log('Deployed destination ' + settings.protocol.dest_fn_name);
     }
 }
@@ -59,7 +59,7 @@ async function deploy_source(src_fn_path, debug, url, fn_name, work_slug, jwt_to
             js = typescript_1.transpile(sourceCode, {
                 target: typescript_1.ScriptTarget.ES2017
             });
-            js = js.replace(/export async/g, 'async');
+            js = js.replace(/export async/g, 'async').replace("import 'segment-typescript-definitions/common'", '').replace("import 'segment-typescript-definitions/custom-source'", '');
         }
         else if (fs.existsSync(js_path)) {
             let sourceCode = await fs.promises.readFile(js_path, 'utf8');
@@ -142,7 +142,7 @@ async function onScreen(event, settings) {
         js = typescript_1.transpile(sourceCode, {
             target: typescript_1.ScriptTarget.ES2017
         });
-        js = js.replace(/export async/g, 'async');
+        js = js.replace(/export async/g, 'async').replace("import 'segment-typescript-definitions/common'", '').replace("import 'segment-typescript-definitions/custom-source'", '');
     }
     await build_function(fn_name, false, work_slug, js, jwt_token, _workspaceId, _ids, retries, retry_backoff);
 }
