@@ -23,11 +23,15 @@ async function deploy_functions(settings, url) {
     //   }) : Promise.resolve()
     // ])
     if (settings.protocol.src_fn_name) {
-        await deploy_source(path.join(process.cwd(), 'src'), true, url, settings.protocol.src_fn_name, settings.protocol.work_slug, settings.server.jwt_token);
+        let src = path.join(process.cwd(), 'src');
+        src = fs.existsSync(src) ? src : process.cwd();
+        await deploy_source(src, true, url, settings.protocol.src_fn_name, settings.protocol.work_slug, settings.server.jwt_token);
         console.log('Deployed source ' + settings.protocol.src_fn_name);
     }
     if (settings.protocol.dest_fn_name) {
-        await deploy_destination(path.join(process.cwd(), 'src'), true, url, settings.protocol.dest_fn_name, settings.protocol.work_slug, settings.server.jwt_token);
+        let src = path.join(process.cwd(), 'src');
+        src = fs.existsSync(src) ? src : process.cwd();
+        await deploy_destination(src, true, url, settings.protocol.dest_fn_name, settings.protocol.work_slug, settings.server.jwt_token);
         console.log('Deployed destination ' + settings.protocol.dest_fn_name);
     }
 }
