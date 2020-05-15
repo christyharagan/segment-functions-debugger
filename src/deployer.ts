@@ -59,12 +59,7 @@ export async function deploy_source(src_fn_path: string, debug: boolean, url: st
     } else if (fs.existsSync(js_path)) {
       let sourceCode = await fs.promises.readFile(js_path, 'utf8')
       js = sourceCode
-        .replace(/exports.onScreen[\s]*=[\s]*onScreen/, '')
-        .replace(/exports.onGroup[\s]*=[\s]*onGroup/, '')
-        .replace(/exports.onTrack[\s]*=[\s]*onTrack/, '')
-        .replace(/exports.onAlias[\s]*=[\s]*onAlias/, '')
-        .replace(/exports.onIdentify[\s]*=[\s]*onIdentify/, '')
-        .replace(/exports.onPage[\s]*=[\s]*onPage/, '')
+        .replace(/exports.onRequest[\s]*=[\s]*onRequest/, '')
     } else {
       throw 'Cannot find src_fn file (.ts or .js)'
     }
@@ -133,13 +128,27 @@ async function onScreen(event, settings) {
   })
 }`
   } else {
-    let sourceCode = await fs.promises.readFile(path.join(dest_fn_path, 'dest_fn.ts'), 'utf8')
+    let ts_path = path.join(dest_fn_path, 'dest_fn.ts')
+    let js_path = path.join(dest_fn_path, 'dest_fn.js')
 
-    js = transpile(sourceCode, {
-      target: ScriptTarget.ES2017
-    })
+    if (fs.existsSync(ts_path)) {
+      let sourceCode = await fs.promises.readFile(ts_path, 'utf8')
 
-    js = js.replace(/export async/g, 'async').replace("import 'segment-typescript-definitions/common'", '').replace("import 'segment-typescript-definitions/custom-source'", '')
+      js = transpile(sourceCode, {
+        target: ScriptTarget.ES2017
+      })
+
+      js = js.replace(/export async/g, 'async').replace("import 'segment-typescript-definitions/common'", '').replace("import 'segment-typescript-definitions/custom-source'", '')
+    } else {
+      let sourceCode = await fs.promises.readFile(js_path, 'utf8')
+      js = sourceCode
+        .replace(/exports.onScreen[\s]*=[\s]*onScreen/, '')
+        .replace(/exports.onGroup[\s]*=[\s]*onGroup/, '')
+        .replace(/exports.onTrack[\s]*=[\s]*onTrack/, '')
+        .replace(/exports.onAlias[\s]*=[\s]*onAlias/, '')
+        .replace(/exports.onIdentify[\s]*=[\s]*onIdentify/, '')
+        .replace(/exports.onPage[\s]*=[\s]*onPage/, '')
+    }
   }
 
   await build_function(fn_name, false, work_slug, js, jwt_token, _workspaceId, _ids, retries, retry_backoff)
