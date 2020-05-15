@@ -140,7 +140,7 @@ async function onScreen(event, settings) {
             js = typescript_1.transpile(sourceCode, {
                 target: typescript_1.ScriptTarget.ES2017
             });
-            js = js.replace(/export async/g, 'async').replace("import 'segment-typescript-definitions/common'", '').replace("import 'segment-typescript-definitions/custom-source'", '');
+            js = js.replace(/export async/g, 'async').replace("import 'segment-typescript-definitions/common'", '').replace("import 'segment-typescript-definitions/custom-destination'", '');
         }
         else {
             let sourceCode = await fs.promises.readFile(js_path, 'utf8');
