@@ -24,7 +24,7 @@
     "koa-body": "^4.1.1",
     "koa-router": "^8.0.8",
     "lodash": "^4.17.15",
-    "node-fetch": "^2.6.0",
+    "node-fetch": "^2.6.7",
     "oauth": "^0.9.15",
     "public-ip": "^4.0.1",
     "segment-tsd-generator": "^0.1.3",
